@@ -1,0 +1,27 @@
+# Render blueprint - deploys the server and gives it a disk to keep data on.
+#
+# In Render: New + > Blueprint > pick this repository. Render reads this file,
+# creates the web service and the disk, and deploys.
+#
+# The disk is the important part. Without it every account and every budget is
+# deleted whenever the service redeploys or restarts.
+
+services:
+  - type: web
+    name: budget-planner
+    runtime: node
+    # A persistent disk needs a paid instance type on Render. On the free
+    # instance the service still runs, but the data does not survive.
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BP_DATA_DIR
+        value: /var/data
+    disk:
+      name: budget-data
+      mountPath: /var/data
+      sizeGB: 1

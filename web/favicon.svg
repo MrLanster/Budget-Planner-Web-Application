@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="108" height="108" role="img" aria-label="Budget Planner">
+  <!--
+    The same rupee mark as the phone app's launcher icon: two crossbars, the
+    stem they hang from, and the leg swung out to the right. Drawn as shapes
+    rather than a font so it renders the same everywhere, at any size.
+  -->
+  <rect width="108" height="108" rx="24" fill="#4F46E5"/>
+  <g fill="#FFFFFF">
+    <rect x="33" y="33" width="42" height="7"/>
+    <rect x="33" y="44" width="38" height="7"/>
+    <rect x="40" y="33" width="7" height="24"/>
+    <rect x="40" y="51" width="7" height="30" transform="rotate(-47 43.5 51)"/>
+  </g>
+</svg>

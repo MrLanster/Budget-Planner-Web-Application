@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Budget Planner</title>
+  <meta name="theme-color" content="#4F46E5" />
+  <!--
+    Settles light or dark before the first paint, so a device set to dark never
+    flashes white while the app boots. It is a file rather than an inline script
+    so the server can forbid inline scripts with a Content-Security-Policy.
+  -->
+  <script src="src/theme-boot.js"></script>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="src/app.css" />
+</head>
+<body>
+  <div id="app" class="phone">
+    <header id="chrome" class="chrome"></header>
+    <main id="content" class="content"></main>
+    <nav id="tabbar" class="tabbar"></nav>
+  </div>
+
+  <div id="modal" class="modal-root" hidden></div>
+  <div id="toasts" class="toasts"></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

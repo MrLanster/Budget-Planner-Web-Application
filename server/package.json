@@ -1,0 +1,14 @@
+{
+  "name": "budget-planner-server",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Backend for Budget Planner: accounts, sessions, and one SQLite database per user.",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  }
+}

@@ -1,0 +1,10 @@
+# Never ship live accounts or the native builds inside the image.
+server/data
+app
+BudgetPlanner-iOS
+.gradle
+.git
+node_modules
+*.apk
+*.aab
+BudgetPlanner-Web.zip

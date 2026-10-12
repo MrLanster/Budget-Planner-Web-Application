@@ -1,0 +1,1085 @@
+/* Budget Planner - web styles.
+ *
+ * Design tokens mirror app/src/main/res/values/colors.xml so a colour change
+ * here is the same change as editing that file.
+ *
+ * The class names mirror the widget names in app/.../ui/Kit.kt:
+ *   .card  -> s.card { }        .hero  -> s.heroCard { }
+ *   .row   -> s.row(...)        .kpi   -> s.kpi(...)
+ *   .chip  -> s.chips(...)      .btn   -> s.button(...)
+ */
+
+:root {
+  --brand: #4F46E5;
+  --brand-dark: #3730A3;
+  --on-brand: #FFFFFF;
+  --bg: #F4F5F9;
+  --card: #FFFFFF;
+  --card2: #FBFBFD;
+  --ink: #0F172A;
+  --muted: #64748B;
+  --line: #E6E8EF;
+  --soft: #EEF2FF;
+  --ok: #0F9D58;
+  --bad: #DC2626;
+  --warn: #D97706;
+  --scrim: rgba(8, 12, 24, 0.4);
+
+  /* Colours with no single Android equivalent: they are worked out from the
+     tokens above for one job each, so they have to be given a dark value too. */
+  --frame-bg: #E9EBF2;                   /* behind the phone frame */
+  --frame-shadow: 0 18px 60px rgba(15, 23, 42, 0.18);
+  --marker: rgba(15, 23, 42, 0.35);      /* the tick on a progress bar */
+  --danger-soft: rgba(220, 38, 38, 0.12);/* the wash behind a danger button */
+  /* The toast inverts to the ink colour, so it is a dark pill on light and a
+     light pill on dark without either needing its own pair of values. */
+  --toast-bg: var(--ink);
+  --toast-fg: var(--card);
+
+  --r-card: 18px;
+  --r-hero: 20px;
+  --r-field: 13px;
+  --r-btn: 14px;
+  --pad: 16px;
+
+  color-scheme: light;
+}
+
+/*
+ * The dark theme. These are the exact same values as
+ * app/src/main/res/values-night/colors.xml, so the browser and the Android app
+ * go dark together. The data-theme attribute is set before the first paint by
+ * the script in index.html.
+ */
+:root[data-theme="dark"] {
+  --brand: #6366F1;
+  --brand-dark: #818CF8;
+  --on-brand: #FFFFFF;
+  --bg: #0B1120;
+  --card: #151D2E;
+  --card2: #1B2436;
+  --ink: #E8ECF5;
+  --muted: #93A2BD;
+  --line: #26324A;
+  --soft: #232A44;
+  --ok: #34D399;
+  --bad: #F87171;
+  --warn: #FBBF24;
+  --scrim: rgba(0, 0, 0, 0.6);
+
+  --frame-bg: #05080F;
+  --frame-shadow: 0 18px 60px rgba(0, 0, 0, 0.6);
+  --marker: rgba(232, 236, 245, 0.45);
+  --danger-soft: rgba(248, 113, 113, 0.16);
+
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--frame-bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The phone frame. Widen past 520px and it becomes a centred column. */
+.phone {
+  width: 100%;
+  max-width: 520px;
+  height: 100dvh;
+  background: var(--bg);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 560px) {
+  body { align-items: flex-start; padding: 24px 0; }
+  .phone { height: min(920px, calc(100dvh - 48px)); border-radius: 26px; box-shadow: var(--frame-shadow); }
+}
+
+/* ------------------------------------------------------------------ chrome */
+
+.chrome {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.chrome-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+
+.chrome-avatar {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  cursor: pointer;
+}
+
+.chrome-title { flex: 1; min-width: 0; }
+.chrome-title h1 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+.chrome-title p { margin: 1px 0 0; font-size: 12px; color: var(--muted); }
+
+.icon-btn {
+  border: 0;
+  background: var(--card2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.icon-btn[hidden] { display: none; }
+.icon-btn:active { transform: scale(0.94); }
+
+.monthbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.monthbar button {
+  border: 1px solid var(--line);
+  background: var(--card2);
+  color: var(--ink);
+  border-radius: 10px;
+  height: 30px;
+  padding: 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.monthbar .month-label {
+  flex: 1;
+  text-align: center;
+  font-weight: 800;
+  font-size: 14px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+}
+.monthbar .this-month {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--brand);
+  background: var(--soft);
+  border: 0;
+  border-radius: 999px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ content */
+
+/* ---------------- the in-app calendar ---------------- */
+.cal { user-select: none; }
+.calhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.caltitle { font-size: 15.5px; font-weight: 700; color: var(--ink); }
+.calnav {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.calnav.off, .calnav:disabled { opacity: 0.3; cursor: default; }
+.calgrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.caldow {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  padding: 2px 0 6px;
+  text-transform: uppercase;
+}
+.calday {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calday:active:not(.off):not(.empty) { transform: scale(0.9); }
+.calday.empty { cursor: default; }
+.calday.today { border-color: var(--brand); color: var(--brand); }
+.calday.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+.calday.off { color: var(--muted); opacity: 0.35; cursor: default; }
+.calfoot { display: flex; gap: 10px; }
+.calfoot .btn { flex: 1; margin: 0; }
+
+/* the small cross that removes a row */
+.rowx {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+}
+.rowx:active { background: var(--soft); color: var(--bad); border-color: var(--bad); }
+
+.content {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 14px 96px;
+  /* not smooth: this is where the page is put back where the user left it, and
+     an animated restore reads as the page sliding about under their finger */
+  scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ------------------------------------------------------------------ tabbar */
+
+.tabbar {
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  position: relative;
+  z-index: 2;
+}
+
+.tab {
+  border: 0;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 2px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--muted);
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 700;
+  position: relative;
+}
+.tab .ico { font-size: 19px; line-height: 1; }
+.tab.on { color: var(--brand); }
+
+/*
+ * Every pressable thing in the app says so the moment you touch it. The tab
+ * bar was the one place that did not, which made the Add button - the thing
+ * pressed most of all - feel like it had swallowed the tap. It now takes the
+ * same pressed background as a list row, and dips by the same amount.
+ */
+.tab:active { background: var(--card2); transform: scale(0.96); }
+.tab.on:active { background: var(--soft); }
+.tab.on { font-weight: 700; }
+
+/*
+ * Landing on a page gives its tab a short overshoot, so the change of place is
+ * something you see rather than only something you read. Add gets a larger one
+ * and a soft brand pill, because that is the tab the app wants you to press.
+ */
+.tab.on.fab { background: var(--soft); border-radius: 14px; }
+@keyframes tabPop {
+  0% { transform: scale(0.88); }
+  55% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+@keyframes fabPop {
+  0% { transform: scale(0.72) translateY(5px); }
+  50% { transform: scale(1.18) translateY(-3px); }
+  100% { transform: scale(1) translateY(0); }
+}
+.tab.on.pop { animation: tabPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.tab.on.pop.fab { animation: fabPop 0.44s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tab.on.pop, .tab.on.pop.fab { animation: none; }
+}
+
+/* ---------------------------------------------------------------- press ink
+   The circle Anim.ripple drops into whatever was touched. It is clipped by the
+   control, so a long button gets a long ripple rather than a stray blob. */
+.chip, .btn, .lrow.tappable, .icon-btn, .kpi[role="button"], .picker, .tab {
+  overflow: hidden;
+  position: relative;
+}
+.ink {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.16;
+  pointer-events: none;
+  transform: scale(0);
+  animation: inkSpread 0.55s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes inkSpread {
+  to { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ink { display: none; }
+}
+
+/* ------------------------------------------------------------------ text bits */
+
+.stack { display: flex; flex-direction: column; }
+.row-h { display: flex; align-items: center; }
+
+.section {
+  margin: 20px 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.label { font-size: 13px; color: var(--ink); }
+.label.bold { font-weight: 800; }
+.big { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+.sub { font-size: 12px; color: var(--muted); }
+.hint { font-size: 11.5px; color: var(--muted); }
+
+.pill {
+  display: inline-block;
+  background: var(--soft);
+  color: var(--brand);
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 10.5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.note {
+  background: var(--soft);
+  border-radius: var(--r-field);
+  padding: 12px 13px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.note + .note { margin-top: 8px; }
+
+.spacer { flex: 1 1 auto; min-height: 0; }
+.vspacer { height: 8px; }
+.vspacer.lg { height: 20px; }
+
+/* tone helper: pass a colour name that matches a --token */
+.tone-brand { color: var(--brand); }
+.tone-ink { color: var(--ink); }
+.tone-muted { color: var(--muted); }
+.tone-ok { color: var(--ok); }
+.tone-bad { color: var(--bad); }
+.tone-warn { color: var(--warn); }
+.bg-soft { background: var(--soft); }
+.bg-card2 { background: var(--card2); }
+.bg-ok { background: var(--ok); }
+.bg-brand { background: var(--brand); }
+.bg-muted { background: var(--muted); }
+
+/* ------------------------------------------------------------------ cards */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: var(--pad);
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.card.hero {
+  background: var(--brand);
+  border-color: transparent;
+  border-radius: var(--r-hero);
+  color: #fff;
+}
+.card.hero .label,
+.card.hero .sub { color: rgba(255, 255, 255, 0.8); }
+.card.hero .kicker {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.card.hero .big { color: #fff; }
+.card.hero .field {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+.card.hero .field::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.kpi {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  cursor: default;
+}
+.kpi[role="button"] { cursor: pointer; }
+.kpi[role="button"]:active { transform: scale(0.99); }
+.kpi .k {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.kpi .v { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; margin-top: 3px; }
+
+.kpi-row { display: flex; gap: 8px; align-items: stretch; }
+.kpi-row .kpi { margin-bottom: 8px; }
+
+.divider { height: 1px; background: var(--line); margin: 10px 0; }
+
+.empty {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 26px 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.empty h3 { margin: 0; font-size: 16px; font-weight: 800; }
+.empty p { margin: 5px 0 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.empty .btn { margin-top: 14px; }
+
+/* ------------------------------------------------------------------ rows */
+
+.lrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  min-height: 58px;
+}
+.lrow.tappable { cursor: pointer; }
+.lrow.tappable:active { background: var(--card2); }
+.lrow .av {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--soft);
+  color: var(--brand);
+}
+.lrow .mid { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.lrow .t {
+  font-size: 14.5px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lrow .s {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.lrow .amt { font-size: 15px; font-weight: 800; white-space: nowrap; text-align: right; }
+
+/* ------------------------------------------------------------------ chips */
+
+.chipscroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0 10px;
+  margin: 0 -14px 0;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.chipscroll::-webkit-scrollbar { display: none; }
+
+.chip {
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 9px 15px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.chip:active { transform: scale(0.97); }
+.chip.on { background: var(--brand); border-color: var(--brand); color: #fff; }
+.chip.on-soft { background: var(--soft); border-color: var(--brand); color: var(--brand); }
+
+/* ------------------------------------------------------------------ buttons */
+
+.btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: var(--soft);
+  color: var(--ink);
+  border: 0;
+  border-radius: var(--r-btn);
+  padding: 14px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  margin: 4px 0 6px;
+}
+.btn:active { transform: scale(0.985); }
+.btn.primary { background: var(--brand); color: #fff; }
+.btn.danger { background: var(--danger-soft); color: var(--bad); }
+.btn.ghost { background: var(--card2); border: 1px solid var(--line); }
+.btn.sm { padding: 9px 12px; font-size: 13.5px; border-radius: 11px; margin: 0; width: auto; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-row { display: flex; gap: 9px; margin: 4px 0 10px; }
+.btn-row .btn { margin: 0; }
+
+/* ------------------------------------------------------------------ fields */
+
+.field {
+  display: block;
+  width: 100%;
+  background: var(--card2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-field);
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+.field::placeholder { color: var(--muted); }
+.field:focus { outline: none; border-color: var(--brand); }
+textarea.field { min-height: 62px; resize: vertical; }
+select.field { appearance: none; }
+.field.money { text-align: right; font-size: 22px; font-weight: 700; }
+
+.picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: var(--card2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-field);
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  margin: 0 0 8px;
+  cursor: pointer;
+}
+.picker:active { border-color: var(--brand); }
+.picker .caret { color: var(--muted); font-size: 12px; }
+
+/* the tick row used for the gift switch and every on/off setting */
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: var(--card2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-field);
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--ink);
+  margin: 0 0 8px;
+  cursor: pointer;
+}
+.toggle.on { border-color: var(--brand); }
+.toggle .t { font-size: 14.5px; font-weight: 800; }
+.toggle .d { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.toggle .tick {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 8px;
+  background: var(--soft);
+  color: var(--brand);
+  font-weight: 800;
+  font-size: 17px;
+  display: grid;
+  place-items: center;
+}
+
+/* ------------------------------------------------------------------ bars */
+
+.bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.bar .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--brand);
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bar.warn .fill { background: var(--warn); }
+.bar.bad .fill { background: var(--bad); }
+.bar.ok .fill { background: var(--ok); }
+.bar .marker {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--marker);
+  border-radius: 2px;
+}
+.card.hero .bar { background: rgba(255, 255, 255, 0.28); }
+.card.hero .bar .fill { background: #fff; }
+
+/* ------------------------------------------------------------------ modal */
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+  padding: 0;
+}
+.modal-root[hidden] { display: none; }
+@media (min-width: 560px) { .modal-root { align-items: center; } }
+
+.sheet {
+  background: var(--bg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 88dvh;
+  border-radius: 22px 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  animation: rise 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (min-width: 560px) { .sheet { border-radius: 22px; } }
+
+@keyframes rise { from { transform: translateY(16px); opacity: 0.4; } }
+
+.sheet-head {
+  padding: 8px 18px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 22px 22px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sheet-head h2 { margin: 0; font-size: 16.5px; font-weight: 800; flex: 1; }
+.sheet-body { overflow-y: auto; padding: 16px 18px 8px; }
+.sheet-foot {
+  padding: 10px 18px calc(14px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--card);
+  display: flex;
+  gap: 9px;
+  border-radius: 0 0 22px 22px;
+}
+.sheet-foot .btn { margin: 0; }
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+  margin: 8px auto 0;
+  grid-column: 1 / -1;
+}
+
+.more-sheet { padding: 8px 14px calc(18px + env(safe-area-inset-bottom)); }
+.more-sheet .mi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: var(--card2);
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin-bottom: 8px;
+  font: inherit;
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+}
+.more-sheet .mi .ico { color: var(--brand); font-size: 20px; width: 24px; text-align: center; }
+.more-sheet .mi:active { transform: scale(0.99); }
+.more-group { margin: 14px 4px 6px; font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--muted); }
+
+/* ------------------------------------------------------------------ lock screen */
+
+.lock {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 22px calc(24px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+.lock[hidden] { display: none; }
+.lock .lhead { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 10px; }
+.lock .lav {
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.lock h2 { margin: 0; font-size: 21px; font-weight: 800; }
+.lock p { margin: 0; color: var(--muted); font-size: 13.5px; }
+.lock .lock-msg { min-height: 20px; font-size: 12.5px; font-weight: 700; }
+.lock .lock-msg.bad { color: var(--bad); }
+.lock .lock-foot { max-width: 380px; width: 100%; margin: 0 auto; }
+
+/* ------------------------------------------------------------------ toasts */
+
+.toasts {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 96px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  width: min(420px, 92vw);
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--toast-bg);
+  color: var(--toast-fg);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.3);
+  animation: toastIn 0.2s ease-out;
+  max-width: 100%;
+  text-align: center;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } }
+.toast-tick {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border-radius: 50%;
+  background: var(--ok);
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* ------------------------------------------------------------------ misc */
+
+.shake { animation: shake 0.32s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  45% { transform: translateX(6px); }
+  70% { transform: translateX(-3px); }
+}
+
+.fade-in > * { animation: fadeUp 0.26s ease-out backwards; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(7px); } }
+
+.stat-row { display: flex; gap: 10px; margin-top: 12px; }
+.stat { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.stat .k { font-size: 10.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+.stat .v { font-size: 14.5px; font-weight: 800; }
+
+.taprow { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+.taprow .btn.sm { flex: 0 0 92px; text-align: center; }
+
+.fieldblock { margin-bottom: 10px; }
+.fieldblock .k { font-size: 11px; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin: 14px 0 6px; }
+.fieldblock .k:first-child { margin-top: 0; }
+.fieldblock .v { font-size: 20px; font-weight: 800; color: var(--brand); margin: 2px 0 1px; }
+.fieldblock .h { font-size: 11.5px; color: var(--muted); }
+
+.badge-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+.checkline {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 6px 0;
+}
+.checkline input { margin: 2px 0 0; width: 17px; height: 17px; accent-color: var(--brand); flex: 0 0 auto; }
+
+/* ------------------------------------------------------------------ page body */
+
+/* The element a page renders into. Every Kit builder appends to this. */
+.page { display: flex; flex-direction: column; }
+
+/* ------------------------------------------------------------------ forms */
+
+.form { display: flex; flex-direction: column; }
+
+.flabel {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin: 14px 0 6px;
+}
+.flabel:first-child { margin-top: 0; }
+
+/* the chip row inside a form, which has no page padding to bleed into */
+.chiprow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  margin-bottom: 8px;
+}
+.chiprow::-webkit-scrollbar { display: none; }
+
+.picker-text { flex: 1; min-width: 0; }
+
+/* a real <input type="time"> riding on the picker, invisible until tapped */
+.time-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+}
+.picker { position: relative; }
+
+/* a label and a value side by side, used by the roommate and category lists */
+.flexrow { display: flex; align-items: center; gap: 10px; padding: 9px 0; }
+
+/* ------------------------------------------------------------------ sheet bits */
+
+.sheet-x { flex: 0 0 32px; width: 32px; height: 32px; font-size: 14px; }
+
+/* the popup sliding away, so the close feels like the sheet left rather than blinked out */
+@keyframes sheetOut { to { opacity: 0; transform: translateY(14px); } }
+
+/* ------------------------------------------------- the big amount on the Add page */
+
+/* The amount is the whole point of the Add page, so it gets the largest type in
+   the app, centred, with the currency symbol kept out of the way. */
+.hero-amount {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  font-size: 44px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  padding: 6px 0 2px;
+  outline: none;
+}
+.hero-amount::placeholder { color: var(--line); }
+.hero-amount:focus { color: var(--ink); }
+
+/* The tap target that opens the calendar, so the date reads as pressable. */
+.date-pick { cursor: pointer; }
+
+/* ------------------------------------------------------- a tick in a box, for bills */
+
+/* Used where a row needs a tick that is not a Form toggle, such as marking a bill
+   paid from a list. Matches the .tick in a form so the two look the same. */
+.tickbox {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: transparent;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.tickbox.on {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+
+/* The round badge at the start of a warning row on Home. */
+.alert-ico {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ------------------------------------------------- setup and the lock screen */
+
+/* Shown instead of the app on the very first run and on every open after that.
+   Same job as SetupActivity on Android, so it reuses the app's own spacing. */
+.setup {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  padding: 40px 22px calc(40px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  background: var(--bg);
+  overflow-y: auto;
+}
+.setup h1 { margin: 4px 0 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.setup p { margin: 0 0 6px; font-size: 13px; color: var(--muted); line-height: 1.55; }
+.setup .form { margin: 6px 0 2px; }
+.setup .note { margin-top: 4px; }
+.setup-logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  margin-bottom: 6px;
+}
+.setup-or {
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 2px 0;
+}
+.btn.wide { width: 100%; height: 50px; font-size: 15px; margin-top: 8px; }
+.btn[disabled] { opacity: 0.6; cursor: default; }
