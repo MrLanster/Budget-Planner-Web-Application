@@ -1,0 +1,12 @@
+# Dependencies for the Streamlit version of the planner (streamlit_app.py).
+#
+# Streamlit Community Cloud installs whatever is listed here, from the root of
+# the repository. The Node version of the app (web/ + server/) needs none of it.
+
+streamlit>=1.36,<2
+SQLAlchemy>=2.0,<3
+
+# Postgres driver. On the Cloud the data has to live in a hosted database,
+# because the container's disk is wiped on every restart. Not needed for the
+# local SQLite fallback, but harmless to install.
+psycopg[binary]>=3.1,<4
